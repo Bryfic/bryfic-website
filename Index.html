@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kaffah - Holistik Muslim App</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --bg: #020617; --surface: #0f172a; --surface-2: #1e293b; --border: rgba(255,255,255,0.1);
+            --primary: #10b981; --primary-dim: rgba(16, 185, 129, 0.15);
+            --secondary: #3b82f6; --secondary-dim: rgba(59, 130, 246, 0.15);
+            --accent: #8b5cf6; --danger: #ef4444; --danger-dim: rgba(239, 68, 68, 0.15);
+            --gold: #f59e0b; --gold-dim: rgba(245, 158, 11, 0.15);
+            --text: #f8fafc; --text-sub: #94a3b8;
+            --shadow: 0 10px 30px -5px rgba(0,0,0,0.5); 
+            --header-h: 65px;
+            --safe-top: env(safe-area-inset-top, 20px); 
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --nav-h: calc(72px + var(--safe-bottom));
+            --pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%2310b981' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc; --surface: #ffffff; --surface-2: #f1f5f9; --border: #e2e8f0;
+            --primary: #059669; --primary-dim: #d1fae5;
+            --secondary: #2563eb; --secondary-dim: #dbeafe;
+            --text: #0f172a; --text-sub: #64748b;
+            --shadow: 0 8px 25px rgba(0,0,0,0.05);
+            --pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23059669' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            background-color: var(--bg); color: var(--text); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0; padding: 0; min-height: 100vh;
+            background-image: var(--pattern), radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 60%);
+            background-attachment: fixed;
+            padding-top: calc(var(--header-h) + var(--safe-top) + 15px); 
+            padding-bottom: calc(var(--nav-h) + 20px);
+            transition: background 0.3s ease, color 0.3s ease; 
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 0 20px; position: relative; }
+
+        /* --- HEADER --- */
+        .header { 
+            position: fixed; top: 0; left: 0; right: 0; 
+            height: calc(var(--header-h) + var(--safe-top));
+            background: rgba(2, 6, 23, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding: 0 20px 12px 20px; z-index: 900;
+        }
+        [data-theme="light"] .header { background: rgba(248, 250, 252, 0.75); }
+        
+        .header-left h1 { margin: 0; font-size: 1.3rem; font-weight: 800; letter-spacing: -0.3px; color: var(--primary); display: flex; align-items: center; gap:6px;}
+        .header-left p { margin: 2px 0 0; font-size: 0.7rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;}
+        
+        .header-icons { display: flex; gap: 10px; padding-bottom: 2px; }
+        .icon-btn {
+            width: 38px; height: 38px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border);
+            color: var(--text); display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-decoration: none; font-weight: 800;
+        }
+        .icon-btn:active { transform: scale(0.92); }
+        .admin-badge { font-size: 0.55rem; background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-weight: 800; text-transform: uppercase;}
+
+        /* --- GREETING SECTION --- */
+        .greeting { margin: 15px 0 25px 0; display: flex; justify-content: space-between; align-items: flex-end;}
+        .greeting h2 { margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-sub); line-height: 1.3;}
+        .greeting .name { color: var(--text); font-size: 1.6rem; font-weight: 800; display: block; margin-top: 2px;}
+        .hijri-badge {
+            background: var(--surface-2); border: 1px solid var(--border); padding: 6px 12px;
+            border-radius: 50px; font-size: 0.7rem; font-weight: 700; color: var(--primary);
+            display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow);
+        }
+
+        /* --- GLASS CARDS (IBADAH & FINANCE) --- */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 22px; 
+            margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); position: relative; overflow: hidden;
+        }
+        [data-theme="light"] .glass-card { background: rgba(255, 255, 255, 0.7); border-color: rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        
+        .gc-bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 8rem; color: var(--primary); opacity: 0.05; transform: rotate(-15deg); pointer-events: none;}
+        
+        .gc-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: var(--text-sub); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
+        
+        /* Sholat Content */
+        .sholat-wrap { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
+        .sholat-name { font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: -4px;}
+        .sholat-time { font-size: 1.1rem; color: var(--primary); font-weight: 700; }
+        .countdown-pill { background: var(--primary-dim); color: var(--primary); font-size: 0.75rem; padding: 6px 12px; border-radius: 50px; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.3);}
+
+        /* Finance Content */
+        .fin-net { font-size: 2.2rem; font-weight: 800; color: var(--text); font-family: 'Share Tech Mono', monospace; margin-bottom: 12px; letter-spacing: -1px;}
+        .fin-stats { display: flex; gap: 15px; }
+        .fin-stat-item { flex: 1; background: var(--surface-2); padding: 10px 15px; border-radius: 14px; border: 1px solid var(--border); }
+        .fs-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;}
+        .fs-val { font-size: 1rem; font-weight: 800; font-family: 'Share Tech Mono', monospace; }
+        .fs-val.danger { color: var(--danger); }
+        .fs-val.gold { color: var(--gold); }
+
+        /* --- UNIFIED QUICK ACTION GRID --- */
+        .section-header { font-size: 1rem; font-weight: 800; margin: 30px 0 15px 0; color: var(--text); }
+        
+        .unified-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+            background: var(--surface); padding: 20px; border-radius: 24px; border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .ug-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; transition: 0.2s; position: relative;}
+        .ug-item:active { transform: scale(0.92); opacity: 0.9; }
+        .ug-icon {
+            width: 50px; height: 50px; border-radius: 16px; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid var(--border); transition: 0.3s;
+        }
+        .ug-label { font-size: 0.65rem; font-weight: 700; color: var(--text-sub); text-align: center; line-height: 1.2;}
+
+        /* Icon Variants */
+        .ic-quran { background: rgba(16,185,129,0.1); color: var(--primary); border-color: rgba(16,185,129,0.2); }
+        .ic-kiblat { background: rgba(59,130,246,0.1); color: var(--secondary); border-color: rgba(59,130,246,0.2); }
+        .ic-catat { background: rgba(139,92,246,0.1); color: var(--accent); border-color: rgba(139,92,246,0.2); }
+        .ic-zakat { background: rgba(245,158,11,0.1); color: var(--gold); border-color: rgba(245,158,11,0.2); }
+        .ic-budget { background: rgba(239,68,68,0.1); color: var(--danger); border-color: rgba(239,68,68,0.2); }
+        .ic-laporan { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+        .ic-doa { background: rgba(16,185,129,0.1); color: var(--primary); border-color: rgba(16,185,129,0.2); }
+        .ic-jadwal { background: rgba(59,130,246,0.1); color: var(--secondary); border-color: rgba(59,130,246,0.2); }
+
+        /* --- QUOTE CARD --- */
+        .quote-card {
+            background: linear-gradient(to right, var(--surface), var(--surface-2)); 
+            border-left: 4px solid var(--gold); border-radius: 0 16px 16px 0;
+            padding: 20px; margin-top: 30px; position: relative;
+        }
+        .quote-icon { font-size: 1.8rem; color: var(--gold); margin-bottom: 8px; opacity: 0.7; }
+        .quote-text { font-size: 0.9rem; font-style: italic; line-height: 1.6; margin-bottom: 10px; font-weight: 500; color: var(--text); }
+        .quote-source { font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* --- SLIDER BANNER PROMO/IKLAN (DYNAMIC) --- */
+        .slider-container { margin-top: 25px; margin-bottom: 10px;}
+        .info-slider {
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;
+            margin: 0 -20px; padding-left: 20px; padding-right: 20px;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
+        }
+        .info-slider::-webkit-scrollbar { display: none; }
+        .info-card {
+            min-width: 290px; height: 130px; border-radius: 20px; scroll-snap-align: start; flex-shrink: 0;
+            box-shadow: var(--shadow); position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            text-decoration: none; transition: 0.2s; background-size: cover; background-position: center;
+            background-color: var(--surface-2); border: 1px solid var(--border);
+        }
+        .info-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%); }
+        .info-card:active { transform: scale(0.98); }
+        .info-content { position: relative; z-index: 2; padding: 15px; }
+        .info-tag { display: inline-block; font-size: 0.6rem; font-weight: 800; background: var(--primary); color: white; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;}
+        .info-card h3 { margin: 0 0 4px 0; font-size: 0.95rem; color: white; font-weight: 800; line-height: 1.3;}
+        .info-card p { margin: 0; font-size: 0.75rem; color: rgba(255,255,255,0.8); line-height: 1.4;}
+
+        /* --- BOTTOM NAVBAR KAFFAH (ORIGINAL) --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            height: var(--nav-h); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center;
+            padding: 8px 10px calc(8px + var(--safe-bottom)) 10px; z-index: 1000;
+        }
+        [data-theme="light"] .bottom-nav { background: rgba(255, 255, 255, 0.95); }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
+            color: var(--text-sub); text-decoration: none; transition: 0.3s; 
+            flex: 1; padding: 8px 0; border-radius: 16px;
+        }
+        .nav-item i { font-size: 1.5rem; transition: 0.3s; }
+        .nav-item span { font-size: 0.6rem; font-weight: 700; transition: 0.3s; }
+        
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { background: var(--primary-dim); padding: 4px 24px; border-radius: 50px; margin-bottom: -2px;}
+
+        /* --- MODALS --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; justify-content: center; backdrop-filter: blur(4px); }
+        .overlay.active { opacity: 1; pointer-events: auto; }
+        .modal { 
+            background: var(--surface); width: 100%; max-width: 500px; 
+            padding: 20px 24px calc(40px + var(--safe-bottom)) 24px; 
+            border-radius: 28px 28px 0 0; border-top: 1px solid var(--border); 
+            transform: translateY(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            max-height: 85vh; overflow-y: auto; overflow-x: hidden; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); 
+        }
+        .modal::before { content: ''; display: block; width: 40px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 20px auto; }
+        .overlay.active .modal { transform: translateY(0); }
+
+        .inp-label { display: block; font-size: 0.75rem; color: var(--text-sub); margin: 15px 0 8px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .inp, select.inp { display: block; width: 100%; box-sizing: border-box; background: var(--bg); border: 1px solid var(--border); padding: 15px 18px; border-radius: 14px; color: var(--text); outline: none; font-size: 0.95rem; font-family: inherit; transition: border 0.2s; appearance: none; -webkit-appearance: none; margin-bottom: 10px;}
+        .inp:focus { border-color: var(--primary); }
+        .btn-full { width: 100%; padding: 16px; border-radius: 16px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 1rem; transition:0.2s; display:flex; justify-content:center; align-items:center; gap:8px;}
+        .btn-full:active { transform: scale(0.98); }
+        .btn-sec { background: transparent; color: var(--text-sub); border: 1px solid transparent; margin-top: 10px; }
+
+        .zakat-res-box { background: var(--surface-2); border: 1px solid var(--border); padding: 15px; border-radius: 14px; margin-top: 15px; text-align: center;}
+        .hadith-warning { background: var(--danger-dim); border-left: 4px solid var(--danger); padding: 14px; border-radius: 12px; margin-bottom: 20px; font-size: 0.8rem; line-height: 1.5; color: var(--text); }
+        .hadith-warning strong { color: var(--danger); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 0.85rem;}
+
+        .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;}
+        .budget-card { background: var(--bg); border: 1px solid var(--border); padding: 15px; border-radius: 14px; text-align: left; }
+        .bc-title { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; color: var(--text-sub);}
+        .bc-val { font-size: 1rem; font-weight: 800; color: var(--text); font-family: 'Share Tech Mono', monospace; word-break: break-word;}
+
+        /* --- LOCK SCREEN (PIN) --- */
+        #pinLockScreen {
+            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 1; transition: opacity 0.4s ease; padding: 20px; text-align: center;
+        }
+        #pinLockScreen.hidden { opacity: 0; pointer-events: none; }
+        .pin-title { font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+        .pin-subtitle { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 30px; }
+        .pin-input {
+            background: var(--surface); border: 2px solid var(--border); color: var(--primary);
+            font-size: 2rem; font-weight: 800; text-align: center; letter-spacing: 15px;
+            padding: 15px; border-radius: 16px; width: 100%; max-width: 250px; outline: none;
+            transition: 0.3s; font-family: 'Share Tech Mono', monospace;
+        }
+        .pin-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-dim); }
+        .pin-input.error { border-color: var(--danger); color: var(--danger); animation: shake 0.4s; }
+
+        /* TOAST */
+        .toast-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.95); color: white; padding: 12px 24px; border-radius: 50px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 3000; display: flex; align-items: center; gap: 10px; opacity: 0; pointer-events: none; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; font-weight: 600;}
+        .toast-box.show { opacity: 1; top: 35px; }
+    </style>
+</head>
+<body>
+
+    <div id="pinLockScreen" class="hidden">
+        <div style="font-size: 4rem; color: var(--primary); margin-bottom: 15px;"><i class="ph-fill ph-lock-key"></i></div>
+        <div class="pin-title">Aplikasi Terkunci</div>
+        <div class="pin-subtitle">Masukkan PIN Kaffah Anda untuk masuk</div>
+        <input type="password" id="unlockPinInput" class="pin-input" inputmode="numeric" maxlength="6" placeholder="••••••" onkeyup="checkUnlockPin(event)">
+        <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 20px;">*PIN tersimpan di perangkat lokal</p>
+    </div>
+
+    <div id="toast" class="toast-box"><i id="tIcon" class="ph-fill ph-check-circle"></i><span id="tMsg">Berhasil</span></div>
+
+    <div class="header">
+        <div class="header-left">
+            <h1>Kaffah <span class="admin-badge" id="adminIndicator" style="display:none;">Sync</span></h1>
+            <p>Hablum Minallah & Minannas</p>
+        </div>
+        <div class="header-icons">
+            <div class="icon-btn" onclick="toggleTheme()"><i id="themeIcon" class="ph-bold ph-moon"></i></div>
+            <a href="akun.html" class="icon-btn" id="headerAvatar"><i class="ph-bold ph-user"></i></a>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="greeting">
+            <div>
+                <h2>Assalamu'alaikum,</h2>
+                <span class="name" id="userNameDisplay">Hamba Allah</span>
+            </div>
+            <div class="hijri-badge" id="sysHijri">
+                <i class="ph-bold ph-moon-stars"></i> ...
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <i class="ph-fill ph-mosque gc-bg-icon"></i>
+            <div class="gc-title"><i class="ph-fill ph-clock"></i> Waktu Sholat Berikutnya</div>
+            <div class="sholat-wrap">
+                <div>
+                    <div class="sholat-name" id="nextPrayerName">Maghrib</div>
+                    <div class="sholat-time" id="nextPrayerTime">18:00 WIB</div>
+                </div>
+                <div class="countdown-pill" id="prayerCountdown">-00:00:00</div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <i class="ph-fill ph-wallet gc-bg-icon" style="color:var(--secondary)"></i>
+            <div class="gc-title"><i class="ph-fill ph-chart-pie-slice"></i> Kekayaan Bersih (Halal)</div>
+            <div class="fin-net" id="halalNetWorth">Rp 0</div>
+            
+            <div class="fin-stats">
+                <div class="fin-stat-item">
+                    <div class="fs-lbl">Utang <i class="ph-fill ph-receipt" style="color:var(--danger)"></i></div>
+                    <div class="fs-val danger" id="sumDebt">Rp 0</div>
+                </div>
+                <div class="fin-stat-item">
+                    <div class="fs-lbl">Target <i class="ph-fill ph-target" style="color:var(--gold)"></i></div>
+                    <div class="fs-val gold" id="sumGoal">Rp 0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">Akses Cepat</div>
+        <div class="unified-grid">
+            <a href="ibadah.html" class="ug-item">
+                <div class="ug-icon ic-quran"><i class="ph-bold ph-book-open-text"></i></div>
+                <span class="ug-label">Al-Quran</span>
+            </a>
+            <a href="ibadah.html" class="ug-item">
+                <div class="ug-icon ic-kiblat"><i class="ph-bold ph-compass"></i></div>
+                <span class="ug-label">Kiblat</span>
+            </a>
+            <a href="ibadah.html" class="ug-item">
+                <div class="ug-icon ic-jadwal"><i class="ph-bold ph-calendar-check"></i></div>
+                <span class="ug-label">Jadwal</span>
+            </a>
+            <a href="#" class="ug-item" onclick="openModal('modalDoa')">
+                <div class="ug-icon ic-doa"><i class="ph-bold ph-hands-praying"></i></div>
+                <span class="ug-label">Doa</span>
+            </a>
+            
+            <a href="#" class="ug-item" onclick="openQuickTx()">
+                <div class="ug-icon ic-catat"><i class="ph-bold ph-pencil-simple"></i></div>
+                <span class="ug-label">Catat Tx</span>
+            </a>
+            <a href="#" class="ug-item" onclick="openZakatModal()">
+                <div class="ug-icon ic-zakat"><i class="ph-bold ph-scales"></i></div>
+                <span class="ug-label">Zakat</span>
+            </a>
+            <a href="#" class="ug-item" onclick="openBudgetModal()">
+                <div class="ug-icon ic-budget"><i class="ph-bold ph-chart-pie-slice"></i></div>
+                <span class="ug-label">Budget</span>
+            </a>
+            <a href="keuangan.html" class="ug-item">
+                <div class="ug-icon ic-laporan"><i class="ph-bold ph-file-pdf"></i></div>
+                <span class="ug-label">Laporan</span>
+            </a>
+        </div>
+
+        <div class="slider-container" id="bannerSection" style="display:none;">
+            <div class="info-slider" id="promoSlider"></div>
+        </div>
+
+        <div class="quote-card">
+            <i class="ph-fill ph-quotes quote-icon"></i>
+            <div class="quote-text" id="dailyQuote">"Bukanlah kekayaan itu karena banyaknya harta, melainkan kekayaan yang sebenarnya adalah kekayaan hati."</div>
+            <div class="quote-source" id="dailySource">— HR. Bukhari & Muslim</div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active"> <i class="ph-fill ph-house"></i> <span>Beranda</span> </a>
+        <a href="ibadah.html" class="nav-item"> <i class="ph-fill ph-mosque"></i> <span>Ibadah</span> </a>
+        <a href="keuangan.html" class="nav-item"><i class="ph-fill ph-wallet"></i><span>Muamalah</span></a>
+        <a href="akun.html" class="nav-item"><i class="ph-fill ph-user"></i> <span>Akun</span> </a>
+    </nav>
+
+    <div class="overlay" id="modalTxQuick">
+        <div class="modal">
+            <h3>Catat Transaksi Cepat</h3>
+            <label class="inp-label">Jenis Transaksi</label>
+            <select id="qTxType" class="inp" onchange="toggleQCategory()">
+                <option value="out">Pengeluaran</option>
+                <option value="in">Pemasukan</option>
+            </select>
+            
+            <label class="inp-label">Pilih Dompet / Akun</label>
+            <select id="qTxSrc" class="inp"></select>
+            
+            <div id="qDivCategory">
+                <label class="inp-label">Kategori</label>
+                <select id="qTxCat" class="inp">
+                    <option value="Makanan">Makanan</option>
+                    <option value="Transportasi">Transportasi</option>
+                    <option value="Belanja">Belanja</option>
+                    <option value="Tagihan">Tagihan</option>
+                    <option value="Sedekah">Sedekah</option>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+
+            <label class="inp-label">Nominal (Rp)</label>
+            <input type="text" inputmode="numeric" id="qTxAmt" class="inp" placeholder="0" oninput="formatInput(this)">
+            
+            <label class="inp-label">Keterangan</label>
+            <input type="text" id="qTxDesc" class="inp" placeholder="Opsional...">
+            
+            <button class="btn-full" onclick="saveQuickTx()">Simpan Transaksi</button>
+            <button class="btn-full btn-sec" onclick="closeAll()">Batal</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="modalZakat">
+        <div class="modal">
+            <h3>Kalkulator Zakat Maal</h3>
+            <div class="hadith-warning" style="background:var(--gold-dim); border-color:var(--gold); color:var(--text);">
+                <strong style="color:var(--gold)"><i class="ph-bold ph-scales"></i> Nisab Zakat (85 gr Emas)</strong>
+                Jika harta bersih mencapai Nisab (Estimasi Rp 110.500.000) dan telah mengendap 1 tahun (Haul), maka wajib dikeluarkan zakatnya 2,5%.
+            </div>
+            <label class="inp-label">Total Aset (Halal) Saat Ini (Rp)</label>
+            <input type="text" inputmode="numeric" id="zakatAsset" class="inp" placeholder="0" oninput="formatInput(this); calcZakat();">
+            <label class="inp-label">Hutang Jatuh Tempo (Rp)</label>
+            <input type="text" inputmode="numeric" id="zakatDebt" class="inp" placeholder="0" oninput="formatInput(this); calcZakat();">
+            <div class="zakat-res-box" id="zakatResult"><span style="color:var(--text-sub)">Ketik nominal di atas untuk menghitung.</span></div>
+            <button class="btn-full" style="background:var(--gold); color:black;" onclick="closeAll()">Selesai / Tutup</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="modalBudget">
+        <div class="modal">
+            <h3>Smart Budgeting Islami</h3>
+            <p style="font-size:0.8rem; color:var(--text-sub); line-height:1.5; margin-bottom:15px;">Masukkan total gaji bulanan Anda untuk melihat rekomendasi alokasi dana yang ideal (Prinsip 10-20-30-40).</p>
+            <label class="inp-label">Total Gaji / Pemasukan Bulanan (Rp)</label>
+            <input type="text" inputmode="numeric" id="budgetIncome" class="inp" placeholder="0" oninput="formatInput(this); calcBudget();">
+            <div id="budgetResultArea" style="display:none; margin-top:15px;">
+                <div class="budget-grid">
+                    <div class="budget-card" style="border-left: 4px solid var(--success);">
+                        <div class="bc-title">Zakat / Sedekah (10%)</div>
+                        <div class="bc-val" id="bSedekah">Rp 0</div>
+                    </div>
+                    <div class="budget-card" style="border-left: 4px solid var(--primary);">
+                        <div class="bc-title">Tabungan / Invest (20%)</div>
+                        <div class="bc-val" id="bTabungan">Rp 0</div>
+                    </div>
+                    <div class="budget-card" style="border-left: 4px solid var(--danger);">
+                        <div class="bc-title">Maks. Cicilan (30%)</div>
+                        <div class="bc-val" id="bCicilan">Rp 0</div>
+                    </div>
+                    <div class="budget-card" style="border-left: 4px solid var(--gold);">
+                        <div class="bc-title">Kebutuhan Pokok (40%)</div>
+                        <div class="bc-val" id="bPokok">Rp 0</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-full btn-sec" onclick="closeAll()">Tutup</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="modalDoa">
+        <div class="modal">
+            <h3>Doa Harian Cepat</h3>
+            <div style="background:var(--surface-2); padding:15px; border-radius:15px; margin-bottom:15px; border: 1px solid var(--border);">
+                <div style="font-family:'Amiri', serif; font-size:1.5rem; text-align:right; margin-bottom:10px; color:var(--primary);">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+                <div style="font-size:0.9rem; font-weight:700; color:var(--text);">Doa Keluar Rumah</div>
+                <div style="font-size:0.8rem; color:var(--text-sub); margin-top:5px; line-height:1.4;">"Bismillahi tawakkaltu 'alallah, laa hawla wa laa quwwata illaa billaah."</div>
+            </div>
+            <div style="background:var(--surface-2); padding:15px; border-radius:15px; margin-bottom:15px; border: 1px solid var(--border);">
+                <div style="font-size:0.9rem; font-weight:700; color:var(--text);">Doa Meminta Rezeki Berkah</div>
+                <div style="font-family:'Amiri', serif; font-size:1.3rem; text-align:right; margin:10px 0; color:var(--gold);">اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلًا مُتَقَبَّلًا</div>
+                <div style="font-size:0.8rem; color:var(--text-sub); line-height:1.4;">"Allahumma inni as-aluka ‘ilman naafi’a wa rizqon thoyyibaa wa ‘amalan mutaqobbalaa."</div>
+            </div>
+            <button class="btn-full btn-sec" onclick="closeAll()">Tutup Doa</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaBTJePD-NCkktaQr8N1x0cG8yGPGiY9s",
+            authDomain: "bryficcr.firebaseapp.com",
+            projectId: "bryficcr",
+            storageBucket: "bryficcr.firebasestorage.app",
+            messagingSenderId: "286617299416",
+            appId: "1:286617299416:web:9d63b0418691f9becfeaad"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.bryficFirebase = {
+            currentUser: null,
+            initAuthAndData: function(callbackData, callbackAuth) {
+                onAuthStateChanged(auth, async (user) => {
+                    this.currentUser = user;
+                    callbackAuth(user); 
+                    if (user) {
+                        try {
+                            const docSnap = await getDoc(doc(db, "user_finance", user.uid));
+                            if(docSnap.exists()) callbackData(docSnap.data());
+                        } catch(e) { console.log("Offline mode user data"); }
+                    }
+                });
+            },
+            fetchBanners: async function(callback) {
+                try {
+                    const docSnap = await getDoc(doc(db, "app_settings", "home_banners"));
+                    if(docSnap.exists() && docSnap.data().banners) {
+                        callback(docSnap.data().banners);
+                        document.getElementById('adminIndicator').style.display = 'inline-block'; 
+                    } else {
+                        callback(null); 
+                    }
+                } catch(e) { callback(null); }
+            },
+            syncDataBg: async function(acc, goals, txs) {
+                if(!this.currentUser) return;
+                try {
+                    await setDoc(doc(db, "user_finance", this.currentUser.uid), {
+                        accounts: acc, goals: goals, transactions: txs, updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                } catch(e) { console.log("Sync Background Gagal"); }
+            }
+        };
+    </script>
+
+    <script>
+        const formatRp = (n) => "Rp " + parseFloat(n).toLocaleString('id-ID');
+        function formatInput(el) { let val = el.value.replace(/[^0-9]/g, ''); if(val !== '') { el.value = parseInt(val, 10).toLocaleString('id-ID'); } else { el.value = ''; } }
+        function parseFormatted(val) { if(!val) return 0; return parseFloat(val.replace(/\./g, '')) || 0; }
+
+        const quotes = [
+            { t: "Bukanlah kekayaan itu karena banyaknya harta, melainkan kekayaan yang sebenarnya adalah kekayaan hati.", s: "HR. Bukhari & Muslim" },
+            { t: "Barangsiapa bertakwa kepada Allah niscaya Dia akan mengadakan baginya jalan keluar dan memberinya rezeki dari arah yang tiada disangka-sangkanya.", s: "QS. At-Talaq: 2-3" },
+            { t: "Sesungguhnya Allah menyukai hamba yang bekerja dan berusaha.", s: "HR. Thabrani" },
+            { t: "Jauhilah tujuh dosa yang membinasakan... salah satunya adalah memakan riba.", s: "HR. Bukhari" }
+        ];
+
+        /* --- UI HELPERS --- */
+        function toast(msg, isErr=false) {
+            const t = document.getElementById('toast'), i = document.getElementById('tIcon'), m = document.getElementById('tMsg');
+            t.style.background = isErr ? 'var(--danger)' : 'var(--text)';
+            t.style.color = isErr ? '#fff' : 'var(--bg)';
+            i.className = isErr ? 'ph-fill ph-warning-circle' : 'ph-fill ph-check-circle';
+            m.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeAll() { document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('active')); }
+
+        /* --- PIN KUNCI LOKAL --- */
+        function runPinLockCheck() {
+            const savedPin = localStorage.getItem('kaffah_pin');
+            const isUnlockedThisSession = sessionStorage.getItem('kaffah_unlocked');
+            
+            if(savedPin && !isUnlockedThisSession) {
+                document.getElementById('pinLockScreen').classList.remove('hidden');
+                document.getElementById('unlockPinInput').focus();
+            }
+        }
+
+        function checkUnlockPin(e) {
+            const input = document.getElementById('unlockPinInput');
+            if (input.value.length === 6) {
+                const savedPin = localStorage.getItem('kaffah_pin');
+                if (input.value === savedPin) {
+                    sessionStorage.setItem('kaffah_unlocked', 'true');
+                    document.getElementById('pinLockScreen').classList.add('hidden');
+                    input.value = '';
+                } else {
+                    input.classList.add('error');
+                    setTimeout(() => {
+                        input.classList.remove('error');
+                        input.value = '';
+                    }, 400);
+                }
+            }
+        }
+
+        /* --- INITIALIZATION --- */
+        function initHome() {
+            runPinLockCheck(); // Eksekusi kunci PIN jika aktif
+
+            const d = new Date();
+            const q = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('dailyQuote').innerText = `"${q.t}"`;
+            document.getElementById('dailySource').innerText = `— ${q.s}`;
+
+            loadTheme();
+            fetchHijri(d);
+            loadFinanceData();
+            
+            if(window.bryficFirebase) {
+                window.bryficFirebase.initAuthAndData(
+                    (cloudData) => {
+                        if(cloudData.accounts) localStorage.setItem('bryfic_acc', JSON.stringify(cloudData.accounts));
+                        if(cloudData.goals) localStorage.setItem('bryfic_goals', JSON.stringify(cloudData.goals));
+                        if(cloudData.txs) localStorage.setItem('bryfic_tx', JSON.stringify(cloudData.txs));
+                        loadFinanceData();
+                    },
+                    (user) => {
+                        const nameDisplay = document.getElementById('userNameDisplay');
+                        let fallbackName = "Hamba Allah";
+                        if(user) fallbackName = user.displayName || user.email.split('@')[0];
+                        
+                        nameDisplay.innerText = fallbackName;
+                        loadAvatarSync(fallbackName); // Sinkronisasi gambar profil base64 dari Akun
+                    }
+                );
+                
+                window.bryficFirebase.fetchBanners((data) => {
+                    renderSliderBanners(data);
+                });
+            } else {
+                loadAvatarSync("Hamba Allah");
+            }
+
+            mockPrayerTime(); 
+        }
+
+        /* --- AVATAR SYNC (BASE64) --- */
+        function loadAvatarSync(fallbackName) {
+            const savedAvatar = localStorage.getItem('kaffah_avatar');
+            const avaBtn = document.getElementById('headerAvatar');
+            if(avaBtn) {
+                if(savedAvatar) {
+                    avaBtn.innerHTML = '';
+                    avaBtn.style.backgroundImage = `url(${savedAvatar})`;
+                    avaBtn.style.backgroundSize = 'cover';
+                    avaBtn.style.backgroundPosition = 'center';
+                    avaBtn.style.border = '2px solid var(--primary)';
+                } else {
+                    avaBtn.innerHTML = fallbackName.charAt(0).toUpperCase();
+                    avaBtn.style.backgroundImage = 'none';
+                    avaBtn.style.background = 'var(--surface)';
+                    avaBtn.style.color = 'var(--text)';
+                    avaBtn.style.border = '1px solid var(--border)';
+                }
+            }
+        }
+
+        /* --- BANNER, THEME, HIJRI --- */
+        function renderSliderBanners(data) {
+            const sliderCont = document.getElementById('bannerSection');
+            const slider = document.getElementById('promoSlider');
+            if(data && data.length > 0) {
+                sliderCont.style.display = 'block';
+                slider.innerHTML = data.map(b => `
+                    <a href="${b.url || '#'}" class="info-card" style="background-image: url('${b.img}');">
+                        <div class="info-content">
+                            <div class="info-tag">${b.tag}</div>
+                            <h3>${b.title}</h3>
+                            <p>${b.desc}</p>
+                        </div>
+                    </a>
+                `).join('');
+            } else {
+                sliderCont.style.display = 'none';
+            }
+        }
+
+        function loadTheme() { 
+            const t = localStorage.getItem('theme') || 'dark'; 
+            document.documentElement.setAttribute('data-theme', t); 
+            document.getElementById('themeIcon').className = t==='dark' ? 'ph-bold ph-moon' : 'ph-bold ph-sun'; 
+        }
+        
+        function toggleTheme() { 
+            const t = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'; 
+            document.documentElement.setAttribute('data-theme', t); 
+            localStorage.setItem('theme', t); 
+            document.getElementById('themeIcon').className=t==='dark'?'ph-bold ph-moon':'ph-bold ph-sun'; 
+        }
+
+        async function fetchHijri(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const dStr = `${day}-${month}-${date.getFullYear()}`;
+            try {
+                const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${dStr}`);
+                const json = await res.json();
+                if(json.code === 200 && json.data && json.data.hijri) {
+                    const h = json.data.hijri;
+                    const monthName = h.month.en === "Ramadan" ? "Ramadhan" : h.month.en;
+                    document.getElementById('sysHijri').innerHTML = `<i class="ph-bold ph-moon-stars"></i> ${h.day} ${monthName} ${h.year} H`;
+                }
+            } catch(e) { document.getElementById('sysHijri').innerHTML = `<i class="ph-bold ph-moon-stars"></i> Offline`; }
+        }
+
+        function loadFinanceData() {
+            const isHidden = localStorage.getItem('kaffah_hide_balance') === 'true';
+            const accounts = JSON.parse(localStorage.getItem('bryfic_acc')) || [];
+            const goals = JSON.parse(localStorage.getItem('bryfic_goals')) || [];
+            const txs = JSON.parse(localStorage.getItem('bryfic_tx')) || [];
+
+            let rawAssets = accounts.filter(a=>a.type==='asset' || a.type.startsWith('inv_')).reduce((s,a)=>s+a.balance,0);
+            const debtTotal = accounts.filter(a=>a.type==='debt').reduce((s,a)=>s+(a.total-a.paid),0);
+            
+            const ribaIn = txs.filter(t=>t.type==='in_riba').reduce((s,t)=>s+t.amount,0);
+            const waqfOut = txs.filter(t=>t.type==='out_waqf').reduce((s,t)=>s+t.amount,0);
+            const currentRiba = ribaIn - waqfOut;
+
+            const halalNetWorth = rawAssets - debtTotal - currentRiba;
+            const targetTerkumpul = goals.reduce((s,g)=>s+(g.current||0),0);
+
+            const displayRp = (val) => isHidden ? "Rp •••••••" : formatRp(val);
+
+            document.getElementById('halalNetWorth').innerText = displayRp(halalNetWorth);
+            document.getElementById('sumDebt').innerText = displayRp(debtTotal);
+            document.getElementById('sumGoal').innerText = displayRp(targetTerkumpul);
+        }
+
+        /* --- QUICK ACTION LOGICS (MODALS) --- */
+
+        // 1. Transaksi Cepat
+        function openQuickTx() {
+            const accounts = JSON.parse(localStorage.getItem('bryfic_acc')) || [];
+            const src = document.getElementById('qTxSrc');
+            src.innerHTML = '';
+            
+            const assets = accounts.filter(a => a.type === 'asset' || a.type.startsWith('inv_'));
+            if(assets.length === 0) {
+                toast("Belum ada dompet! Tambah di menu Muamalah.", true);
+                return;
+            }
+            
+            assets.forEach(a => src.add(new Option(`${a.name} (${formatRp(a.balance)})`, a.id)));
+            
+            document.getElementById('qTxAmt').value = '';
+            document.getElementById('qTxDesc').value = '';
+            toggleQCategory();
+            openModal('modalTxQuick');
+        }
+
+        function toggleQCategory() {
+            const type = document.getElementById('qTxType').value;
+            document.getElementById('qDivCategory').style.display = type === 'out' ? 'block' : 'none';
+        }
+
+        function saveQuickTx() {
+            const type = document.getElementById('qTxType').value;
+            const sId = document.getElementById('qTxSrc').value;
+            const amt = parseFormatted(document.getElementById('qTxAmt').value);
+            const desc = document.getElementById('qTxDesc').value || 'Transaksi Cepat';
+            const cat = type === 'out' ? document.getElementById('qTxCat').value : 'Pemasukan';
+            
+            if(!amt || !sId) return toast("Nominal & Akun wajib diisi!", true);
+            
+            let accounts = JSON.parse(localStorage.getItem('bryfic_acc')) || [];
+            let txs = JSON.parse(localStorage.getItem('bryfic_tx')) || [];
+            const goals = JSON.parse(localStorage.getItem('bryfic_goals')) || [];
+            
+            const srcIndex = accounts.findIndex(a => a.id == sId);
+            if(srcIndex === -1) return;
+            
+            if(type === 'out' && accounts[srcIndex].balance < amt) {
+                return toast("Saldo di dompet tidak cukup!", true);
+            }
+            
+            if(type === 'in') { accounts[srcIndex].balance += amt; } 
+            else { accounts[srcIndex].balance -= amt; }
+            
+            const txDate = new Date();
+            txs.push({ id: Date.now(), type: type, amount: amt, desc: desc, cat: cat, date: txDate.toISOString() });
+            
+            localStorage.setItem('bryfic_acc', JSON.stringify(accounts));
+            localStorage.setItem('bryfic_tx', JSON.stringify(txs));
+            
+            if(window.bryficFirebase) {
+                window.bryficFirebase.syncDataBg(accounts, goals, txs);
+            }
+            
+            loadFinanceData();
+            closeAll();
+            toast("Transaksi Berhasil Dicatat!");
+        }
+
+        // 2. Kalkulator Zakat
+        function openZakatModal() {
+            const accs = JSON.parse(localStorage.getItem('bryfic_acc')) || [];
+            let rawAssets = accs.filter(a=>a.type==='asset' || a.type.startsWith('inv_')).reduce((s,a)=>s+a.balance,0);
+            const debtTotal = accs.filter(a=>a.type==='debt').reduce((s,a)=>s+(a.total-a.paid),0);
+            
+            document.getElementById('zakatAsset').value = rawAssets.toLocaleString('id-ID');
+            document.getElementById('zakatDebt').value = debtTotal.toLocaleString('id-ID');
+            calcZakat();
+            openModal('modalZakat');
+        }
+
+        function calcZakat() {
+            let asset = parseFormatted(document.getElementById('zakatAsset').value); 
+            let debt = parseFormatted(document.getElementById('zakatDebt').value);
+            let net = asset - debt; 
+            let nisab = 110500000; 
+            let resEl = document.getElementById('zakatResult');
+            
+            if(net >= nisab) { 
+                let zakat = net * 0.025; 
+                resEl.innerHTML = `<span style="color:var(--success); font-weight:700;">Wajib Zakat Maal (2.5%)</span><br><b style="font-size:1.5rem;color:var(--text);display:inline-block;margin-top:5px;">${formatRp(zakat)}</b><br><span style="font-size:0.7rem;color:var(--text-sub);margin-top:5px;display:inline-block;">*Segera tunaikan jika harta sudah mengendap 1 tahun (Haul).</span>`; 
+            } else { 
+                resEl.innerHTML = `<span style="color:var(--text-sub); font-size:0.85rem;">Harta bersih belum mencapai Nisab (Estimasi 110Jt).<br><b style="color:var(--text);">Tidak wajib zakat maal.</b></span>`; 
+            }
+        }
+
+        // 3. Smart Budgeting
+        function openBudgetModal() {
+            document.getElementById('budgetIncome').value = '';
+            document.getElementById('budgetResultArea').style.display = 'none';
+            openModal('modalBudget');
+        }
+
+        function calcBudget() {
+            let inc = parseFormatted(document.getElementById('budgetIncome').value);
+            if(inc > 0) { 
+                document.getElementById('budgetResultArea').style.display = 'block'; 
+                document.getElementById('bSedekah').innerText = formatRp(inc * 0.10); 
+                document.getElementById('bTabungan').innerText = formatRp(inc * 0.20); 
+                document.getElementById('bCicilan').innerText = formatRp(inc * 0.30); 
+                document.getElementById('bPokok').innerText = formatRp(inc * 0.40); 
+            } else { 
+                document.getElementById('budgetResultArea').style.display = 'none'; 
+            }
+        }
+
+        /* --- PRAYER TIME --- */
+        function mockPrayerTime() {
+            const elTime = document.getElementById('prayerCountdown');
+            const elName = document.getElementById('nextPrayerName');
+            const elTimeTxt = document.getElementById('nextPrayerTime');
+
+            setInterval(() => {
+                const now = new Date();
+                const savedPrayerStr = localStorage.getItem('kaffah_prayer_next');
+                
+                if(savedPrayerStr) {
+                    const savedPrayer = JSON.parse(savedPrayerStr);
+                    const target = new Date(savedPrayer.time);
+                    
+                    if (now > target) {
+                        elTime.innerText = "Waktunya Sholat";
+                        return; 
+                    }
+                    
+                    elName.innerText = savedPrayer.name;
+                    elTimeTxt.innerText = target.toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'}) + " WIB";
+                    
+                    const diff = target - now;
+                    const h = Math.floor(diff/3600000).toString().padStart(2,'0');
+                    const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                    const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+                    elTime.innerText = `-${h}:${m}:${s}`;
+
+                } else {
+                    let target = new Date();
+                    target.setHours(18, 0, 0); 
+                    
+                    if (now > target) {
+                        target.setDate(target.getDate() + 1); target.setHours(4, 30, 0); 
+                        elName.innerText = "Subuh"; elTimeTxt.innerText = "04:30";
+                    } else {
+                        elName.innerText = "Maghrib"; elTimeTxt.innerText = "18:00";
+                    }
+                    
+                    const diff = target - now;
+                    const h = Math.floor(diff/3600000).toString().padStart(2,'0');
+                    const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                    const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+                    elTime.innerText = `-${h}:${m}:${s}`;
+                }
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initHome);
+    </script>
+</body>
+</html>
